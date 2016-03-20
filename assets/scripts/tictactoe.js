@@ -189,30 +189,61 @@ function TicTacToe() {
   }
 
   function isGameOver() {
+    var x, o, xc, oc, isEmpty = false, xa = 0, oa = 0, xta = 0, ota = 0;
     for (var i = 0; i < 3; ++i) {
-      for (var j = 0; j < 3; ++j) {
-        if (board.isEmpty(i, j)) {
-          return false;
-        }
+      x = 0;
+      o = 0;
+      xc = 0;
+      oc = 0;
+
+      if (board.get(i, i) === "X") {
+        ++xa;
       }
-    }
+      else if (board.get(i, i) === "O") {
+        ++oa;
+      }
 
-    return true;
-  }
+      if (board.get(i, 2 - i) === "X") {
+        ++xta;
+      }
+      else if (board.get(i, 2 - i) === "O") {
+        ++ota;
+      }
 
-  function printBoard() {
-    for (var i = 0; i < 3; ++i) {
-      var art = "";
+      if (xa === 3 || oa === 3 ||
+          xta === 3 || ota === 3) {
+            return true;
+      }
+
       for (var j = 0; j < 3; ++j) {
-        if (board.isEmpty(i, j)) {
-          art += "*" + "  ";
+        if (board.get(i, j) === "X") {
+          ++x;
+        }
+        else if (board.get(i, j) === "O") {
+          ++o;
         }
         else {
-          art += board.get(i, j) + "  ";
+          isEmpty = true;
+        }
+
+        if (board.get(j, i) === "X") {
+          ++xc;
+        }
+        else if (board.get(j, i) === "O") {
+          ++oc;
+        }
+        else {
+          isEmpty = true;
+        }
+
+        if (x === 3 || o === 3 ||
+            xc === 3 || oc === 3) {
+              return true;
         }
       }
-      console.log(art);
     }
+
+    return !isEmpty;
   }
 
   function getElement(i, j) {
@@ -232,7 +263,6 @@ function TicTacToe() {
   this.putX = putX;
   this.putO = putO;
   this.calculateWeight = calculateWeight;
-  this.printBoard = printBoard;
   this.isGameOver = isGameOver;
   this.isX = isX;
   this.isO = isO;

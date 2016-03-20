@@ -7,29 +7,46 @@
   var game = new TicTacToe();
 
   document.addEventListener("DOMContentLoaded", function(event) {
-    var newGameButton = document.getElementById("newGame");
+    var newGameButton = document.getElementById("new-game-button");
+    var newGameDialogButton = document.getElementById("new-game-dialog-button");
     var gameBoard = document.getElementsByClassName("game-board")[0];
     newGameButton.addEventListener("click", onNewGame);
+    newGameDialogButton.addEventListener("click", onNewGame);
     gameBoard.addEventListener("click", onGameEvent);
   });
 
   function onNewGame() {
     game = new TicTacToe();
     updateBoard();
+    gameOver(false);
   }
 
   function onGameEvent(eventArgument) {
-    var gameBoard = document.getElementsByClassName("game-board")[0];
-    for (var i = 0; i < gameBoard.children.length; i++) {
-      var rowDiv = gameBoard.children[i];
+    if (game.isGameOver()) {
+      return;
+    }
+
+    var gameRows = document.getElementsByClassName("game-row");
+    for (var i = 0; i < gameRows.length; i++) {
+      var rowDiv = gameRows[i];
       for (var j = 0; j < rowDiv.children.length; j++) {
         if (eventArgument.target === rowDiv.children[j]) {
           if (!game.putX(i, j)) {
             return;
           }
 
+          if (game.isGameOver()) {
+            updateBoard();
+            gameOver(true);
+            return;
+          }
+
           aiGameMove();
           updateBoard();
+          if (game.isGameOver()) {
+            gameOver(true);
+          }
+
           return;
         }
       }
@@ -42,15 +59,14 @@
       var weight;
       for (var i = 0; i < game.getBoardSize(); ++i) {
         for (var j = 0; j < game.getBoardSize(); ++j) {
-          var reset = game.putO(i, j);
-          if (reset) {
+          var needReset = game.putO(i, j);
+          if (needReset) {
             var newWeight = game.calculateWeight("O");
             if (typeof (weight) == "undefined" || newWeight > weight) {
               weight = newWeight;
               n = i;
               m = j;
             }
-
             game.reset(i, j);
           }
         }
@@ -62,22 +78,27 @@
   }
 
   function updateBoard() {
-    var gameBoard = document.getElementsByClassName("game-board")[0];
+    var gameRows = document.getElementsByClassName("game-row");
     for (var i = 0; i < game.getBoardSize(); i++) {
       for (var j = 0; j < game.getBoardSize(); j++) {
           if (game.isX(i, j)) {
-            gameBoard.children[i].children[j].children[0].className =
+            gameRows[i].children[j].children[0].className =
               "fa fa-times fa-3x align";
           }
           else if(game.isO(i, j)) {
-            gameBoard.children[i].children[j].children[0].className =
+            gameRows[i].children[j].children[0].className =
               "fa fa-circle-o fa-3x align";
           }
           else {
-            gameBoard.children[i].children[j].children[0].className = "";
+            gameRows[i].children[j].children[0].className = "";
           }
       }
     }
+  }
+
+  function gameOver(show) {
+    var gameOverPanel = document.getElementById("game-over-panel");
+    gameOverPanel.className = show ? "show-panel" : "";
   }
 
 })(TicTacToe);

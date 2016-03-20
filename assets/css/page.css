@@ -5,8 +5,9 @@
 }
 
 .game-board {
+  position: relative;
   margin: auto;
-  border: solid cyan 8px;
+  border: solid green 8px;
   margin-top: 10px;
   width: 306px;
   height: 306px;
@@ -34,7 +35,7 @@
   height: 50px;
 }
 
-#newGame {
+#new-game-button, #new-game-dialog-button {
   width: 80px;
   height: 40px;
   font-family: sans-serif;
@@ -47,11 +48,44 @@
   box-shadow: 3px 3px 5px grey;
 }
 
-#newGame:focus {
+#new-game-button:focus, #new-game-dialog-button:focus {
   outline: none;
 }
 
-#newGame:active {
+#new-game-button:active, #new-game-dialog-button:active {
   margin-top: 1px;
   box-shadow: 1px 1px 1px #dfdfdf;
+}
+
+#game-over-panel {
+  display: inline-block;
+  position: absolute;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #bdbdbd;
+  top: 30%;
+  left: 15%;
+  width: 200px;
+  height: 80px;
+  text-align: center;
+  border: solid green 2px;
+  box-shadow: 5px 5px 5px grey;
+}
+
+#game-over-panel p {
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: bolder;
+  color: #df4444;
+  margin-bottom: 15px;
+}
+
+#game-over-panel button {
+  width: 120px;
+  padding: 0 10px 0 10px;
+  background-color: #335933;
+}
+
+.show-panel {
+  z-index: 1;
 }
